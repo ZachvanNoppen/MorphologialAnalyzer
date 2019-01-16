@@ -26,17 +26,17 @@ public class getMeaning {
 		splitArray(word);
 		
 	}
-	public static String[][] splitArray(String word) {
+	public static void splitArray(String word) {
 		
 		String decs[] = Decompose.decomposeToArrayOfStrings(word);
 		for(int i=0; i<decs.length; i++) {
 			System.out.println(decs[i]);
 		}
-		//Change this to something that is not a set size
-		String[][] breakdown = new String[100][20];
-			
+		
 		//GETTING THE INDEXES TO GRAB THE SUBSTRINGS
 		List<int[]> indArr = new ArrayList<>();
+		List<String[]> breakDown = new ArrayList<>();
+		
 		int[] posArr = new int[] {0};
 		
 		for(int i = 0; i < decs.length; i++) {
@@ -57,21 +57,25 @@ public class getMeaning {
 		}
 		
 		//SPLITTING OUT THE DIFFERENTS MORPHOLOGIES
+		
 		for(int i = 0; i < decs.length; i++) {
-			//for each word
+			//Putting each set of words into an array
+			String[] splitWord = new String[decs.length+1];
 			for(int j= 0; j < indArr.get(i).length-1; j++) {
-				breakdown[i][j] = decs[i].substring(indArr.get(i)[j], indArr.get(i)[j+1]);
-				breakdown[i][j] = breakdown[i][j].replace("{", "");
-				breakdown[i][j] = breakdown[i][j].replace("}", "");
+				
+				splitWord[j] = decs[i].substring(indArr.get(i)[j], indArr.get(i)[j+1]);
+				splitWord[j] = splitWord[j].replace("{", "");
+				splitWord[j] = splitWord[j].replace("}", "");
 			}
+			//Making a 2D array of the words
+			breakDown.add(splitWord);
 		}
 		
 		//PRINTING THE SPLIT WORDS
 		for(int i = 0; i < decs.length; i++) {
 			//for each word
 			for(int j= 0; j < indArr.get(i).length-1; j++) {
-				System.out.println(breakdown[i][j]);
-				
+				System.out.println(breakDown.get(i)[j]);
 			}
 			//System.out.println(indArr.get(i).length);
 		}
@@ -83,25 +87,33 @@ public class getMeaning {
 		//return breakdown;
 		
 		//SORTING THE DATA
+		//What is happening right now is that you are only looking for x and x+1
+		//SHould be x  vs x+1, x vs x+2 ..... x vsx+n
+		//Think searching algorithm
 		int tempNum = 0;
+		System.out.println("HI");
+		System.out.println(decs.length);
+		System.out.println(breakDown.get(0).length);
 		
-		for(int i = 1; i < breakdown.length; i++) {
+		for(int i = 1; i < breakDown.size(); i++) {
 			int valid = 0;
 			
-			for(int j = 0; j < breakdown[i].length; j++) {
+			for(int j = 0; j < breakDown.get(0).length; j++) {
 				//Test the value in front
-				System.out.println(breakdown[i-1][j]);
-				int locP = breakdown[i-1][j].indexOf(":");
-				int locS = breakdown[i][j].indexOf(":");
-				
-				if(breakdown[i-1][j].substring(0,locP).equals(breakdown[i][j].substring(0,locS))) {
+				//System.out.println(breakDown.get(i-1)[j]);
+				int locP = breakDown.get(i-1)[j].indexOf(":");
+				int locS = breakDown.get(i-1)[j].indexOf(":");
+				System.out.println(breakDown.get(i-1)[j].substring(0,locP));
+				System.out.println(breakDown.get(i)[j].substring(0,locP));
+				if(breakDown.get(i-1)[j].substring(0,locP).equals(breakDown.get(i)[j].substring(0,locS))) {
 					//The morph in front of the column is the same and should be same list
 					valid++;
+					
 				}
 			}
 			
 			//Testing if all of the pre-colon morphs match
-			if(valid == breakdown[i].length) {
+			if(valid == breakDown.get(i).length) {
 				//This means all will be in the same column
 				tempNum++;
 			}
@@ -109,7 +121,7 @@ public class getMeaning {
 		System.out.println(tempNum);
 		
 		
-		return breakdown;
+		//return breakDown;
 	}
 
 }
