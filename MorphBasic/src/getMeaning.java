@@ -23,6 +23,7 @@ public class getMeaning {
 			System.out.println(mngs[i]);
 		}
 		System.out.println();*/
+		
 		splitArray(word);
 		
 	}
@@ -32,6 +33,7 @@ public class getMeaning {
 		for(int i=0; i<decs.length; i++) {
 			System.out.println(decs[i]);
 		}
+		
 		
 		//GETTING THE INDEXES TO GRAB THE SUBSTRINGS
 		List<int[]> indArr = new ArrayList<>();
@@ -77,51 +79,60 @@ public class getMeaning {
 			for(int j= 0; j < indArr.get(i).length-1; j++) {
 				System.out.println(breakDown.get(i)[j]);
 			}
-			//System.out.println(indArr.get(i).length);
+			System.out.println(i);
 		}
 		
 		System.out.println();
 		System.out.println();
 		System.out.println();
 		
-		//return breakdown;
 		
 		//SORTING THE DATA
-		//What is happening right now is that you are only looking for x and x+1
-		//SHould be x  vs x+1, x vs x+2 ..... x vsx+n
-		//Think searching algorithm
-		int tempNum = 0;
-		System.out.println("HI");
-		System.out.println(decs.length);
-		System.out.println(breakDown.get(0).length);
-		
-		for(int i = 1; i < breakDown.size(); i++) {
-			int valid = 0;
+		int pos = 1;
+		for (int k = 0; k < decs.length; k++) {
 			
-			for(int j = 0; j < breakDown.get(0).length; j++) {
-				//Test the value in front
-				//System.out.println(breakDown.get(i-1)[j]);
-				int locP = breakDown.get(i-1)[j].indexOf(":");
-				int locS = breakDown.get(i-1)[j].indexOf(":");
-				System.out.println(breakDown.get(i-1)[j].substring(0,locP));
-				System.out.println(breakDown.get(i)[j].substring(0,locP));
-				if(breakDown.get(i-1)[j].substring(0,locP).equals(breakDown.get(i)[j].substring(0,locS))) {
-					//The morph in front of the column is the same and should be same list
-					valid++;
+			for(int i = 1; i < decs.length; i++) {
+				int valid = 0;
+				for(int j= 0; j < indArr.get(i).length-1; j++) {
+					int locP = breakDown.get(k)[j].indexOf(':');
+					int locC = breakDown.get(i)[j].indexOf(':');
+					if(breakDown.get(k)[j].substring(0,locP).equals(breakDown.get(i)[j].substring(0,locC))) {
+						System.out.print(i);
+						
+						System.out.print(breakDown.get(k)[j].substring(0,locP));
+						System.out.print(breakDown.get(i)[j].substring(0,locC));
+						System.out.println(" is the same");
+						
+						valid++;
+					}
 					
+					if(valid == breakDown.get(k).length) {
+						//The tables are the same, so
+						String temp[] = breakDown.get(pos);
+						breakDown.add(pos, breakDown.get(i));
+						breakDown.add(i, temp);
+						
+						
+					}
 				}
-			}
-			
-			//Testing if all of the pre-colon morphs match
-			if(valid == breakDown.get(i).length) {
-				//This means all will be in the same column
-				tempNum++;
+				pos++;
+				k = pos;
+				System.out.println(k);
 			}
 		}
-		System.out.println(tempNum);
 		
 		
-		//return breakDown;
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		
+		for(int i = 0; i < decs.length; i++) {
+			//for each word
+			for(int j= 0; j < indArr.get(i).length-1; j++) {
+				System.out.println(breakDown.get(i)[j]);
+			}
+			
+		}
 	}
 
 }
